@@ -20,72 +20,88 @@ class QuranSurahBookmark extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Quran Surah Bookmark")),
-      body: Obx(() {
-        return Center(
-          child:
-              bookmarkController.surahBookmarkList.isEmpty
-                  ? Center(child: Text("No usedBookmarks yet"))
-                  : ListView.builder(
-                    itemCount: bookmarkController.surahBookmarkList.length,
-                    itemBuilder: (context, index) {
-                      final QuranSurahBookmarkModel bookmark =
-                          bookmarkController.surahBookmarkList[index];
-                      return ListTile(
-                        title:
-                            bookmark.pageNo != null
-                                ? Text(
-                                  'Surah ${bookmark.surahName} - PageNo ${bookmark.pageNo}',
-                                )
-                                : Text(
-                                  'Surah ${bookmark.surahName} - Ayah ${bookmark.ayahNumber}',
-                                ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            bookmarkController.removeSurahBookmark(bookmark);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Bookmark deleted!')),
-                            );
-                          },
-                        ),
-                        onTap: () async {
-                          loadingController.showLoading();
-                          await Future.delayed(const Duration(seconds: 5));
-                          quranController.getTotalVersesOfSurah(
-                            surahNumber: bookmark.surahNumber,
-                          );
-                          await quranController.getPageNoBySurah(
-                            surahNumber: bookmark.surahNumber,
-                          );
-                          quranController.quranListIndex.value == 0;
+      body: Stack(
+        children: [
+          Obx(() {
+            return Center(
+              child:
+                  bookmarkController.surahBookmarkList.isEmpty
+                      ? Center(child: Text("No usedBookmarks yet"))
+                      : ListView.builder(
+                        itemCount: bookmarkController.surahBookmarkList.length,
+                        itemBuilder: (context, index) {
+                          final QuranSurahBookmarkModel bookmark =
+                              bookmarkController.surahBookmarkList[index];
+                          return ListTile(
+                            title:
+                                bookmark.pageNo != null
+                                    ? Text(
+                                      'Surah ${bookmark.surahName} - PageNo ${bookmark.pageNo}',
+                                    )
+                                    : Text(
+                                      'Surah ${bookmark.surahName} - Ayah ${bookmark.ayahNumber}',
+                                    ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                bookmarkController.removeSurahBookmark(
+                                  bookmark,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Bookmark deleted!')),
+                                );
+                              },
+                            ),
+                            onTap: () async {
+                              loadingController.showLoading();
+                              await Future.delayed(const Duration(seconds: 5));
+                              quranController.getTotalVersesOfSurah(
+                                surahNumber: bookmark.surahNumber,
+                              );
+                              await quranController.getPageNoBySurah(
+                                surahNumber: bookmark.surahNumber,
+                              );
+                              quranController.quranListIndex.value == 0;
 
-                          bookmark.pageNo == null
-                              ? FlutterQuran().navigateToSurah(
-                                bookmark.surahNumber,
-                              )
-                              : FlutterQuran().navigateToPage(bookmark.pageNo!);
-                          //  FlutterQuran().navigateToSurah(bookmark.surahNumber);
-                          quranController.surahTranslation.value =
-                              bookmark.translation;
-                          quranController.getSurahDetails(
-                            surahNo: bookmark.surahNumber,
+                              bookmark.pageNo == null
+                                  ? FlutterQuran().navigateToSurah(
+                                    bookmark.surahNumber,
+                                  )
+                                  : FlutterQuran().navigateToPage(
+                                    bookmark.pageNo!,
+                                  );
+                              //  FlutterQuran().navigateToSurah(bookmark.surahNumber);
+                              quranController.surahTranslation.value =
+                                  bookmark.translation;
+                              quranController.getSurahDetails(
+                                surahNo: bookmark.surahNumber,
+                              );
+                              searchController.updateStartIndex(
+                                ayatCount: quranController.ayahCountSurah,
+                                bookMark: true,
+                                ayahNumber: bookmark.ayahNumber,
+                              );
+                              loadingController.hideLoading();
+                              Get.toNamed(
+                                '/surah_screen',
+                                arguments: bookmark.surahNumber,
+                              );
+                            },
                           );
-                          searchController.updateStartIndex(
-                            ayatCount: quranController.ayahCountSurah,
-                            bookMark: true,
-                            ayahNumber: bookmark.ayahNumber,
-                          );
-                          Get.toNamed(
-                            '/surah_screen',
-                            arguments: bookmark.surahNumber,
-                          );
-                          loadingController.hideLoading();
                         },
-                      );
-                    },
-                  ),
-        );
-      }),
+                      ),
+            );
+          }),
+          Obx(() {
+            return loadingController.isLoading.value
+                ? Container(
+                  color: Colors.black54,
+                  child: const Center(child: CircularProgressIndicator()),
+                )
+                : const SizedBox.shrink();
+          }),
+        ],
+      ),
     );
   }
 }

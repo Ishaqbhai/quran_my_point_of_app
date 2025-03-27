@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran_flutter/quran.dart';
-import 'package:quran_hadith_app/boarding/view/global_loader.dart';
 import 'package:quran_hadith_app/core/app_routes.dart';
 import 'package:quran_hadith_app/core/theme.dart';
 import 'package:quran_hadith_app/boarding/controller/loading_controller.dart';

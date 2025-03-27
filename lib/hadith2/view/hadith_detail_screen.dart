@@ -17,7 +17,7 @@ class HadithDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            hadithController.clearHadithList();
+            // hadithController.clearHadithList();
             hadithController.hadithNo = 0;
             Get.to(HadithBookScreen(title: hadithController.collectionName));
           },

@@ -105,8 +105,9 @@ class SurahList extends StatelessWidget {
                     );
                     quranController.getSurahDetails(surahNo: surahNumber);
                     FlutterQuran().navigateToSurah(surahNumber);
-                    Get.toNamed('/surah_screen', arguments: surahNumber);
                     loadingController.hideLoading();
+                    Get.toNamed('/surah_screen', arguments: surahNumber);
+                    
                   },
                 ),
               );

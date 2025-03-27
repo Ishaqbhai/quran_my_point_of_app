@@ -20,50 +20,72 @@ class QuranJuzBookmark extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Quran Juz Bookmark")),
-      body: Obx(() {
-        return Center(
-          child:
-              bookmarkController.juzBookmarkList.isEmpty
-                  ? Center(child: Text("No usedBookmarks yet"))
-                  : ListView.builder(
-                    itemCount: bookmarkController.juzBookmarkList.length,
-                    itemBuilder: (context, index) {
-                      final JuzBookmarkModel bookmark =
-                          bookmarkController.juzBookmarkList[index];
-                      return ListTile(
-                        title: Text(
-                          'Juz ${bookmark.juzNumber} - Page ${bookmark.pageNumber}',
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            bookmarkController.removeJuzBookmark(bookmark);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Bookmark deleted!')),
-                            );
-                          },
-                        ),
-                        onTap: () async {
-                          loadingController.showLoading();
-                          await Future.delayed(const Duration(seconds: 5));
-                          quranController.quranListIndex.value == 1;
-                          await quranController.getNoOfVersesInJuz(
-                            juzNumber: bookmark.juzNumber,
-                            surahNumber: bookmark.surahNumber,
+      body: Stack(
+        children: [
+          Obx(() {
+            return Center(
+              child:
+                  bookmarkController.juzBookmarkList.isEmpty
+                      ? Center(child: Text("No usedBookmarks yet"))
+                      : ListView.builder(
+                        itemCount: bookmarkController.juzBookmarkList.length,
+                        itemBuilder: (context, index) {
+                          final JuzBookmarkModel bookmark =
+                              bookmarkController.juzBookmarkList[index];
+                          return ListTile(
+                            title:
+                                bookmark.pageNumber == 0
+                                    ? Text(
+                                      'Juz ${bookmark.juzNumber} - Surah number ${bookmark.surahNumber}',
+                                    )
+                                    : Text(
+                                      'Juz ${bookmark.juzNumber} - Page ${bookmark.pageNumber}',
+                                    ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                bookmarkController.removeJuzBookmark(bookmark);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Bookmark deleted!')),
+                                );
+                              },
+                            ),
+                            onTap: () async {
+                              loadingController.showLoading();
+                              await Future.delayed(const Duration(seconds: 5));
+                              quranController.quranListIndex.value = 1;
+                              quranController.juzTranslation.value = false;
+                              if (bookmark.surahNumber != 0) {
+                                quranController.juzTranslation.value = true;
+                                quranController.getNoOfVersesInJuz(
+                                  juzNumber: bookmark.juzNumber,
+                                  surahNumber: bookmark.surahNumber,
+                                );
+                              }
+
+                              FlutterQuran().navigateToJozz(bookmark.juzNumber);
+                              searchController.j.value = 0;
+                              loadingController.hideLoading();
+                              Get.toNamed(
+                                '/juz_screen',
+                                arguments: bookmark.juzNumber,
+                              );
+                            },
                           );
-                          FlutterQuran().navigateToJozz(bookmark.juzNumber);
-                          searchController.j.value = 0;
-                          Get.toNamed(
-                            '/juz_screen',
-                            arguments: bookmark.juzNumber,
-                          );
-                          loadingController.hideLoading();
                         },
-                      );
-                    },
-                  ),
-        );
-      }),
+                      ),
+            );
+          }),
+          Obx(() {
+            return loadingController.isLoading.value
+                ? Container(
+                  color: Colors.black54,
+                  child: const Center(child: CircularProgressIndicator()),
+                )
+                : const SizedBox.shrink();
+          }),
+        ],
+      ),
     );
   }
 }

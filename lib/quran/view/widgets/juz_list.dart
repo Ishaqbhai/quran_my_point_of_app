@@ -16,88 +16,101 @@ class JuzList extends StatelessWidget {
   final loadingController = Get.find<LoadingController>();
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 30,
-      itemBuilder: (context, index) {
-        var juz = QuranController.juzData[index];
-        int juzNumber = juz['juz'];
-        List<int> surahNumbers = juz["surahs"];
-        // List<JuzSurahVerses> juzNumbers = Quran.getSurahVersesInJuzAsList(
-        //   juzNumber,
-        // );
+    return Stack(
+      children: [
+        ListView.builder(
+          itemCount: 30,
+          itemBuilder: (context, index) {
+            var juz = QuranController.juzData[index];
+            int juzNumber = juz['juz'];
+            List<int> surahNumbers = juz["surahs"];
+            // List<JuzSurahVerses> juzNumbers = Quran.getSurahVersesInJuzAsList(
+            //   juzNumber,
+            // );
 
-        final surahDetails = quranController.getSurahDetailsInJuz(
-          juzNumber: juzNumber,
-          surahNumbers: surahNumbers,
-        );
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          elevation: 3,
-          margin: EdgeInsets.symmetric(vertical: 8),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: AppColors().backgroundColor,
-              child: Text(
-                juzNumber.toString(),
-                style: TextStyle(fontWeight: FontWeight.bold),
+            final surahDetails = quranController.getSurahDetailsInJuz(
+              juzNumber: juzNumber,
+              surahNumbers: surahNumbers,
+            );
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-            ),
-            title: Text(
-              "Juz $juzNumber",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:
-                  surahDetails.map((detail) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            " ${detail['surahName']}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
+              elevation: 3,
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: AppColors().backgroundColor,
+                  child: Text(
+                    juzNumber.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                title: Text(
+                  "Juz $juzNumber",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                      surahDetails.map((detail) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                " ${detail['surahName']}",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                " ${detail['ayahCount']} Ayat",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            " ${detail['ayahCount']} Ayat",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-            ),
+                        );
+                      }).toList(),
+                ),
 
-            onTap: () async {
-              loadingController.showLoading();
-              // quranController.getAythJuzNoTranslation(surahNo: ,ayahCount: );
-              // Navigate to Juz details page
-              //    quranController.getAyathByPge();
-              await Future.delayed(const Duration(seconds: 5));
-              // quranController.getPageNoByjuz(
-              //   juzNumber: juzNumber,
-              //   surahNumber: surahNumbers[0],
-              // );
-              await quranController.getNoOfVersesInJuz(
-                juzNumber: juzNumber,
-                surahNumber: surahNumbers[0],
-              );
-              FlutterQuran().navigateToJozz(juzNumber);
-              searchController.j.value = 0;
-              Get.toNamed('/juz_screen', arguments: juzNumber);
-              loadingController.hideLoading();
-            },
-          ),
-        );
-      },
+                onTap: () async {
+                  loadingController.showLoading();
+                  // quranController.getAythJuzNoTranslation(surahNo: ,ayahCount: );
+                  // Navigate to Juz details page
+                  //    quranController.getAyathByPge();
+                  await Future.delayed(const Duration(seconds: 5));
+                  // quranController.getPageNoByjuz(
+                  //   juzNumber: juzNumber,
+                  //   surahNumber: surahNumbers[0],
+                  // );
+                  await quranController.getNoOfVersesInJuz(
+                    juzNumber: juzNumber,
+                    surahNumber: surahNumbers[0],
+                  );
+                  FlutterQuran().navigateToJozz(juzNumber);
+                  searchController.j.value = 0;
+                  loadingController.hideLoading();
+                  Get.toNamed('/juz_screen', arguments: juzNumber);
+                  
+                },
+              ),
+            );
+          },
+        ),
+        Obx(() {
+          return loadingController.isLoading.value
+              ? Container(
+                color: Colors.black54,
+                child: const Center(child: CircularProgressIndicator()),
+              )
+              : const SizedBox.shrink();
+        }),
+      ],
     );
   }
 }

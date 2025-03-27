@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran/quran.dart' as quran;
-import 'package:quran_hadith_app/boarding/controller/loading_controller.dart';
 import 'package:quran_hadith_app/bookmarks/controller/bookmark_controller.dart';
 import 'package:quran_hadith_app/core/app_colors.dart';
 import 'package:quran_hadith_app/quran/controller/quran_controller.dart';
@@ -16,7 +15,6 @@ class JuzScreen extends StatelessWidget {
   final SurahSearchController searchController = Get.put(
     SurahSearchController(),
   );
-  final loadingController = Get.find<LoadingController>();
   @override
   Widget build(BuildContext context) {
     final int juzNo = Get.arguments;
@@ -151,7 +149,7 @@ class JuzScreen extends StatelessWidget {
                         // if (k >= surahNumbers.length) {
                         //   return const SizedBox();
                         // }
-                        loadingController.showLoading();
+                        //  loadingController.showLoading();
                         int index = searchController.surahNumberJuz.value + k;
                         searchController.surahNumberJuz.value == index
                             ? searchController.j.value = 0
@@ -173,7 +171,7 @@ class JuzScreen extends StatelessWidget {
                         int ayahCount =
                             quranController.surahDetails[index]['ayahCount'];
                         int startNo = quranController.juzSurahAyahStartNo.value;
-                        loadingController.hideLoading();
+                        // loadingController.hideLoading();
                         return Column(
                           children: [
                             // Surah Name Header
@@ -279,7 +277,8 @@ class JuzScreen extends StatelessWidget {
             Align(
               alignment: Alignment.topLeft,
               child: IconButton(
-                onPressed: () {                  bookmarkController.saveJuzBookmark(
+                onPressed: () {
+                  bookmarkController.saveJuzBookmark(
                     pageNumber: 0,
                     juzNumber: juzNumber,
                     surahNo: surahNumber,

@@ -15,49 +15,64 @@ class HadithBookmark extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Hadith Bookmark")),
-      body: Obx(() {
-        return Center(
-          child:
-              bookmarkController.hadithBookmarkList.isEmpty
-                  ? Center(child: Text("No usedBookmarks yet"))
-                  : ListView.builder(
-                    itemCount: bookmarkController.hadithBookmarkList.length,
-                    itemBuilder: (context, index) {
-                      final HadithBookmarkModel bookmark =
-                          bookmarkController.hadithBookmarkList[index];
-                      return ListTile(
-                        title: Text(
-                          ' ${bookmark.collectionName} - BookNo ${bookmark.bookNo}',
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            bookmarkController.removeHadithBookmark(bookmark);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Bookmark deleted!')),
-                            );
-                          },
-                        ),
-                        onTap: () async {
-                          loadingController.showLoading();
-                          await Future.delayed(const Duration(seconds: 5));
-                          // Navigate to the bookmarked Hadith
-                          hadithController.fetchHadithBooks(
-                            collection: bookmark.collectionName,
+      body: Stack(
+        children: [
+          Obx(() {
+            return Center(
+              child:
+                  bookmarkController.hadithBookmarkList.isEmpty
+                      ? Center(child: Text("No usedBookmarks yet"))
+                      : ListView.builder(
+                        itemCount: bookmarkController.hadithBookmarkList.length,
+                        itemBuilder: (context, index) {
+                          final HadithBookmarkModel bookmark =
+                              bookmarkController.hadithBookmarkList[index];
+                          return ListTile(
+                            title: Text(
+                              ' ${bookmark.collectionName} - BookNo ${bookmark.bookNo}',
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                bookmarkController.removeHadithBookmark(
+                                  bookmark,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Bookmark deleted!')),
+                                );
+                              },
+                            ),
+                            onTap: () async {
+                              loadingController.showLoading();
+                              await Future.delayed(const Duration(seconds: 5));
+                              // Navigate to the bookmarked Hadith
+                              hadithController.fetchHadithBooks(
+                                collection: bookmark.collectionName,
+                              );
+                              hadithController.fetchHadithList(
+                                bookIndex: bookmark.bookNo,
+                                noOfHadith: bookmark.totalNoOfHadith,
+                              );
+                              hadithController.hadithNo =
+                                  bookmark.hadithaNo - 1;
+                              loadingController.hideLoading();
+                              Get.to(() => HadithDetailScreen());
+                            },
                           );
-                          hadithController.fetchHadithList(
-                            bookIndex: bookmark.bookNo,
-                            noOfHadith: bookmark.totalNoOfHadith,
-                          );
-                          hadithController.hadithNo = bookmark.hadithaNo - 1;
-                          Get.to(() => HadithDetailScreen());
-                          loadingController.hideLoading();
                         },
-                      );
-                    },
-                  ),
-        );
-      }),
+                      ),
+            );
+          }),
+          Obx(() {
+            return loadingController.isLoading.value
+                ? Container(
+                  color: Colors.black54,
+                  child: const Center(child: CircularProgressIndicator()),
+                )
+                : const SizedBox.shrink();
+          }),
+        ],
+      ),
     );
   }
 }
