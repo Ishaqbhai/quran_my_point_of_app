@@ -49,18 +49,4 @@ Future<void> printHadithData() async {
       }
     }
   }
-
-  // Print the data
-  // for (var book in hadithData.keys) {
-  //   for (var chapter in hadithData[book]!.keys) {
-  //     int count = hadithData[book]![chapter]!['count'] as int;
-  //     List<int> pages = List<int>.from(
-  //       hadithData[book]![chapter]!['pages'] as List<dynamic>,
-  //     );
-
-  //     print("  📂 Chapter: $chapter");
-  //     print("    🔢 Hadith Count: $count");
-  //     print("    📜 Pages: ${pages.join(', ')}");
-  //   }
-  // }
 }

@@ -11,6 +11,4 @@ class SplashScreen extends StatelessWidget {
       body: Center(child: Image(image: AssetImage("assests/quran_logo.png"))),
     );
   }
-
-  
-}
+  }

@@ -59,6 +59,7 @@ class SurahList extends StatelessWidget {
                     surahNameEnglish,
                     style: const TextStyle(
                       fontSize: 14,
+                      overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -91,12 +92,13 @@ class SurahList extends StatelessWidget {
                     surahName,
                     style: const TextStyle(
                       fontSize: 20,
+                      overflow: TextOverflow.ellipsis,
                       fontFamily: 'TraditionalArabic',
                     ),
                   ),
                   onTap: () async {
                     loadingController.showLoading();
-                    await Future.delayed(const Duration(seconds: 5));
+                    await Future.delayed(const Duration(seconds: 1));
                     quranController.getTotalVersesOfSurah(
                       surahNumber: surahNumber,
                     );
@@ -107,7 +109,6 @@ class SurahList extends StatelessWidget {
                     FlutterQuran().navigateToSurah(surahNumber);
                     loadingController.hideLoading();
                     Get.toNamed('/surah_screen', arguments: surahNumber);
-                    
                   },
                 ),
               );

@@ -1,13 +1,17 @@
+
 class QuranLanguageModel {
   final String name;
-  
-  QuranLanguageModel(this.name);
-}
 
-List<QuranLanguageModel> quranLanguages = [
-  QuranLanguageModel('English'),
-  QuranLanguageModel('Hindi'),
-  QuranLanguageModel('Malayalam'),
-  QuranLanguageModel('Tamil'),
-  QuranLanguageModel('Urdu'),
-];
+  QuranLanguageModel(this.name);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QuranLanguageModel && name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
+
+  @override
+  String toString() => name;
+}

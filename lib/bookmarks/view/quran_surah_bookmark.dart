@@ -6,6 +6,7 @@ import 'package:quran_hadith_app/bookmarks/controller/bookmark_controller.dart';
 import 'package:quran_hadith_app/bookmarks/model/quran_surah_bookmark_model.dart';
 import 'package:quran_hadith_app/quran/controller/quran_controller.dart';
 import 'package:quran_hadith_app/quran/controller/surah_search_controller.dart';
+import 'package:quran_hadith_app/quran/view/surah_pages_of_quran.dart';
 
 class QuranSurahBookmark extends StatelessWidget {
   QuranSurahBookmark({super.key});
@@ -45,7 +46,7 @@ class QuranSurahBookmark extends StatelessWidget {
                               icon: Icon(Icons.delete),
                               onPressed: () {
                                 bookmarkController.removeSurahBookmark(
-                                  bookmark,
+                                  bookmark: bookmark,
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Bookmark deleted!')),
@@ -54,7 +55,7 @@ class QuranSurahBookmark extends StatelessWidget {
                             ),
                             onTap: () async {
                               loadingController.showLoading();
-                              await Future.delayed(const Duration(seconds: 5));
+                              await Future.delayed(const Duration(seconds: 1));
                               quranController.getTotalVersesOfSurah(
                                 surahNumber: bookmark.surahNumber,
                               );
@@ -62,29 +63,38 @@ class QuranSurahBookmark extends StatelessWidget {
                                 surahNumber: bookmark.surahNumber,
                               );
                               quranController.quranListIndex.value == 0;
-
-                              bookmark.pageNo == null
-                                  ? FlutterQuran().navigateToSurah(
-                                    bookmark.surahNumber,
-                                  )
-                                  : FlutterQuran().navigateToPage(
-                                    bookmark.pageNo!,
-                                  );
-                              //  FlutterQuran().navigateToSurah(bookmark.surahNumber);
+                              if (bookmark.pageNo == null) {
+                                FlutterQuran().navigateToSurah(
+                                  bookmark.surahNumber,
+                                );
+                                searchController.updateStartIndex(
+                                  ayatCount: quranController.ayahCountSurah,
+                                  bookMark: true,
+                                  ayahNumber: bookmark.ayahNumber!,
+                                );
+                              } else {
+                                FlutterQuran().navigateToPage(bookmark.pageNo!);
+                              }
                               quranController.surahTranslation.value =
                                   bookmark.translation;
                               quranController.getSurahDetails(
                                 surahNo: bookmark.surahNumber,
                               );
-                              searchController.updateStartIndex(
-                                ayatCount: quranController.ayahCountSurah,
-                                bookMark: true,
-                                ayahNumber: bookmark.ayahNumber,
-                              );
+
                               loadingController.hideLoading();
-                              Get.toNamed(
-                                '/surah_screen',
-                                arguments: bookmark.surahNumber,
+                              bookmark.pageNo == null
+                                  ? Get.toNamed(
+                                    '/surah_screen',
+                                    arguments: bookmark.surahNumber,
+                                  )
+                                  : Get.to(
+                                    SurahPagesOfQuran(
+                                      surahNo: bookmark.pageNo!,
+                                    ),
+                                  );
+                              await Future.delayed(const Duration(seconds: 5));
+                              bookmarkController.removeSurahBookmark(
+                                bookmark: bookmark,
                               );
                             },
                           );

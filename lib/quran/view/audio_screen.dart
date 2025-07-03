@@ -8,18 +8,21 @@ class QuranAudioScreen extends StatelessWidget {
   final int? surahNumber;
   final int? juzNumber;
   final bool surah;
+  final String? surahName;
   QuranAudioScreen({
     super.key,
     this.surahNumber,
     this.juzNumber,
     required this.surah,
+    this.surahName,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 90,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: AppColors().bookmarkColor, // Match screen background color
         borderRadius: BorderRadius.only(
@@ -36,44 +39,63 @@ class QuranAudioScreen extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.only(left: 5),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            /// **Surah Name & Reciter**
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Al-Fatiha",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors().appWhiteColor,
+            // **Surah Name & Reciter**
+            SizedBox(
+              width: MediaQuery.of(context).size.width * .63,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  surah
+                      ? Text(
+                        surahName!,
+                        //  "Al-Fatiha",
+                        style: TextStyle(
+                          fontSize: 17,
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors().appWhiteColor,
+                        ),
+                      )
+                      : Text(
+                        "Juz $juzNumber",
+                        //  "Al-Fatiha",
+                        style: TextStyle(
+                          fontSize: 17,
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors().appWhiteColor,
+                        ),
+                      ),
+
+                  Text(
+                    "Abdul Basit",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: AppColors().appWhiteColor,
+                    ),
                   ),
-                ),
-                Text(
-                  "Abdul Basit",
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: AppColors().appWhiteColor,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 /// **Play Button**
                 Obx(
                   () => IconButton(
+                    splashRadius: 1,
                     icon: Icon(
                       controller.isPlaying.value
                           ? Icons.pause
                           : Icons.play_arrow,
                       color: AppColors().appWhiteColor,
                     ),
-                    iconSize: 32,
+                    iconSize: 30,
                     onPressed: () async {
                       controller.isPlaying.value
                           ? controller.pauseAudio()
@@ -90,7 +112,8 @@ class QuranAudioScreen extends StatelessWidget {
                 Obx(
                   () => IconButton(
                     icon: Icon(Icons.stop, color: AppColors().appWhiteColor),
-                    iconSize: 28,
+                    iconSize: 26,
+                    splashRadius: 1,
                     onPressed:
                         controller.isPlaying.value
                             ? controller.stopAudio
@@ -103,6 +126,5 @@ class QuranAudioScreen extends StatelessWidget {
         ),
       ),
     );
-    //   );
   }
 }

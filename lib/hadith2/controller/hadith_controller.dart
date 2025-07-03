@@ -1,8 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hadith/classes.dart';
 import 'package:hadith/hadith.dart';
 import 'package:html/parser.dart';
+import 'package:quran_flutter/enums/quran_language.dart';
+import 'package:quran_hadith_app/Profile/controller/profile_controller.dart';
 import 'package:quran_hadith_app/hadith2/model/hadith_item.dart';
+import 'package:translator/translator.dart';
 
 class HadithController extends GetxController {
   RxList<Book> hadithBooks = <Book>[].obs;
@@ -14,9 +18,15 @@ class HadithController extends GetxController {
   RxList hadithList = <HadithItem>[].obs;
   String collectionName = "";
   int hadithNo = 0;
+  final TextEditingController searchHadithController = TextEditingController();
   late Collections collectionEnum;
   int bookNumber = 0;
   int totalNumberOfHadith = 0;
+  final ProfileController profileController = Get.put(ProfileController());
+  RxString hadithLanguage = "".obs;
+  final translator = GoogleTranslator();
+
+  RxList<Book> allHadithBooks = <Book>[].obs;
 
   @override
   void onInit() {
@@ -27,12 +37,63 @@ class HadithController extends GetxController {
   @override
   void dispose() {
     hadithList.clear();
-
+    searchHadithController.clear();
     super.dispose();
   }
 
   clearHadithList() {
     hadithList.clear();
+  }
+
+  void fetchHadithBooks({required String collection}) async {
+    try {
+      isLoading(true);
+      collectionName = collection;
+      collectionEnum = Collections.values.firstWhere(
+        (e) => e.toString().split('.').last == collectionName,
+      );
+
+      final books = getBooks(collectionEnum);
+      allHadithBooks.value = books;
+      hadithBooks.value = books; // display all initially
+    } catch (e) {
+      Get.snackbar("Error", "Error fetching books: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  void filterBooks(String query) {
+    final lowerQuery = query.toLowerCase();
+    isLoading(true);
+    if (lowerQuery.isEmpty || lowerQuery == "") {
+      hadithBooks = allHadithBooks;
+      isLoading(false);
+    } else {
+      hadithBooks.value =
+          allHadithBooks.where((book) {
+            final englishTitle =
+                book.book
+                    .firstWhere(
+                      (b) => b.lang == "en",
+                      orElse: () => BookData(lang: "", name: ""),
+                    )
+                    .name
+                    .toLowerCase();
+
+            final arabicTitle =
+                book.book
+                    .firstWhere(
+                      (b) => b.lang == "ar",
+                      orElse: () => BookData(lang: "", name: ""),
+                    )
+                    .name;
+
+            isLoading(false);
+            return englishTitle.contains(lowerQuery) ||
+                arabicTitle.contains(lowerQuery);
+          }).toList();
+    }
   }
 
   void fetchHadithCollections() async {
@@ -41,28 +102,6 @@ class HadithController extends GetxController {
       collection.value = getCollections();
     } catch (e) {
       Get.snackbar("Error", "Error fetching hadith books: $e");
-    } finally {
-      isLoading(false);
-    }
-  }
-
-  void fetchHadithBooks({required String collection}) async {
-    try {
-      isLoading(true);
-
-      collectionName = collection;
-
-      // Convert string collectionName to the appropriate enum value
-      // Collections
-      collectionEnum = Collections.values.firstWhere(
-        (e) => e.toString().split('.').last == collectionName,
-        // orElse: () => Collections.bukhari, // Default to Bukhari if not found
-      );
-
-      // hadithBooks.value
-      hadithBooks.value = getBooks(collectionEnum);
-    } catch (e) {
-      Get.snackbar("Error", "Error fetching books: $e");
     } finally {
       isLoading(false);
     }
@@ -187,6 +226,50 @@ class HadithController extends GetxController {
       hadithTitle.value = 'Error fetching Hadith';
       hadithArabicText.value = '';
       hadithTranslation.value = '';
+    }
+  }
+
+  fetchHadithLanguage({required String hadithMeaning}) async {
+    switch (profileController.selectedLanguage.value) {
+      case QuranLanguage.hindi:
+        hadithLanguage.value =
+            (await translator.translate(
+              hadithMeaning,
+              from: 'en',
+              to: 'hi', // Hindi language code
+            )).text;
+        break;
+
+      case QuranLanguage.malayalam:
+        hadithLanguage.value =
+            (await translator.translate(
+              hadithMeaning,
+              from: 'en',
+              to: 'ml', // Malayalam language code
+            )).text;
+        break;
+
+      case QuranLanguage.tamil:
+        hadithLanguage.value =
+            (await translator.translate(
+              hadithMeaning,
+              from: 'en',
+              to: 'ta', // Tamil language code
+            )).text;
+        break;
+
+      case QuranLanguage.urdu:
+        hadithLanguage.value =
+            (await translator.translate(
+              hadithMeaning,
+              from: 'en',
+              to: 'ur', // Urdu language code
+            )).text;
+        break;
+
+      default:
+        hadithLanguage.value =
+            hadithMeaning; // Default: show English if no match
     }
   }
 }

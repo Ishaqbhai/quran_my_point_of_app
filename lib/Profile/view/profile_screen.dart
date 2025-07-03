@@ -1,66 +1,83 @@
+import 'package:double_tap_to_exit/double_tap_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran_flutter/enums/quran_language.dart';
 import 'package:quran_hadith_app/Profile/controller/profile_controller.dart';
+import 'package:quran_hadith_app/Profile/view/author_login.dart';
+import 'package:quran_hadith_app/bookmarks/view/bookmark_screen.dart';
+import 'package:quran_hadith_app/core/app_colors.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
   final ProfileController profileController = Get.put(ProfileController());
+
   @override
   Widget build(BuildContext context) {
-    // List<dynamic> QuranLanguage1 = [
-    //   english('English'),
-    //   hindi('Hindi'),
-    //   malayalam('Malayalam'),
-    //   tamil('Tamil'),
-    //   urdu('Urdu'),
-    // ];
-
-    return Scaffold(
-      appBar: AppBar(leading: SizedBox.shrink(), title: Text("Profile")),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(() {
-              return DropdownButton<QuranLanguage>(
-                value: profileController.selectedLanguage.value,
-                items:
-                    QuranLanguage.values.map((QuranLanguage language) {
-                      return DropdownMenuItem<QuranLanguage>(
-                        value: language,
-                        child: Text(
-                          language.toString().split('.').last.toUpperCase(),
-                        ),
-                      );
-                    }).toList(),
-                onChanged: (QuranLanguage? newLanguage) {
-                  if (newLanguage != null) {
-                    profileController.updateLanguage(newLanguage);
-                  }
-                },
-              );
-              // return DropdownButtonFormField<String>(
-              //     value: "Ayat",
-              //     decoration: InputDecoration(
-              //       border: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(10),
-              //       ),
-              //       filled: true,
-              //       //  fillColor: Colors.white,
-              //     ),
-              //     items: ["QuranLanguage.english", "QuranLanguage.tamil", "QuranLanguage.urdu", "QuranLanguage.malayalam"]
-              //         .map((String value) {
-              //       return DropdownMenuItem<String>(
-              //         value: profileController.language.value,
-              //         child: Text(value),
-              //       );
-              //     }).toList(),
-              // onChanged: (String? newValue) {
-              //   profileController.changeLanguage(lang: newValue!);
-              //    });
-            }),
+    return DoubleTapToExit(
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: SizedBox(
+            width: double.infinity,
+            child: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(color: AppColors().appBarColor),
+                    child: Text(
+                      'Profile',
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  ),
+                  Obx(() {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: DropdownButton<QuranLanguage>(
+                        value: profileController.selectedLanguage.value,
+                        isExpanded: true,
+                        items:
+                            profileController.quranLanguages.map((language) {
+                              return DropdownMenuItem<QuranLanguage>(
+                                value: language,
+                                child: Text(language.name),
+                              );
+                            }).toList(),
+                        onChanged: (newLanguage) {
+                          if (newLanguage != null) {
+                            profileController.selectedLanguage.value =
+                                newLanguage;
+                          }
+                        },
+                      ),
+                    );
+                  }),
+                  ListTile(
+                    leading: Icon(Icons.bookmark),
+                    title: Text("Bookmarks"),
+                    onTap: () {
+                      Get.to(() => BookmarksScreen());
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.admin_panel_settings),
+                    title: Text("Admin Login"),
+                    onTap: () {
+                      Get.to(() => AuthorLogin());
+                    },
+                  ),
+                  // ListTile(
+                  //   leading: Icon(Icons.settings),
+                  //   title: Text("Settings"),
+                  //   onTap: () {
+                  //     // Add settings navigation
+                  //   },
+                  //  ),
+                ],
+              ),
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

@@ -12,10 +12,5 @@ class AppRoutes {
     GetPage(name: '/surah_screen', page: () => SurahScreen()),
     GetPage(name: '/home_screen', page: () => HomeScreen()),
     GetPage(name: '/juz_screen', page: () => JuzScreen()),
-    //  GetPage(name: '/hadith_list_sreen', page: () => HadithListSreen()),
-    // GetPage(
-    //   name: '/hadith_detail_screen',
-    //   page: () => HadithDetailScreen(),
-    // ),
   ];
 }

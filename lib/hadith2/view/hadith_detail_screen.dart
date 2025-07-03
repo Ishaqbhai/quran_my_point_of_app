@@ -1,4 +1,3 @@
-// hadith_detail_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran_hadith_app/bookmarks/controller/bookmark_controller.dart';
@@ -17,7 +16,6 @@ class HadithDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            // hadithController.clearHadithList();
             hadithController.hadithNo = 0;
             Get.to(HadithBookScreen(title: hadithController.collectionName));
           },
@@ -37,10 +35,13 @@ class HadithDetailScreen extends StatelessWidget {
               itemBuilder: (context, i) {
                 int index = hadithController.hadithNo + i;
                 final hadith = hadithController.hadithList[index];
+                hadithController.fetchHadithLanguage(
+                  hadithMeaning: hadith.english,
+                );
                 return verseTile(
                   index: index + 1,
                   arabic: hadith.arabic,
-                  translation: hadith.english,
+                  translation: hadithController.hadithLanguage.value,
                   context: context,
 
                   hadithIndex: index,
@@ -74,23 +75,35 @@ class HadithDetailScreen extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.topLeft,
-                child: IconButton(
-                  onPressed: () {
-                    controller.saveHadithBookmark(
+                child: GetBuilder<BookmarkController>(
+                  builder: (_) {
+                    final isMarked = controller.isHadithBookmarked(
                       bookNumber: hadithController.bookNumber,
                       collectionName: hadithController.collectionName,
                       hadithNumber: index,
-                      noOfHadith: hadithController.totalNumberOfHadith,
-                      // startHadithNo: hadithController.startHadithCount,
-                      // endHadithNo: hadithController.endHadithCound,
                       translation: true,
                     );
-                    //......................................................................
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Bookmark saved for Hadith')),
+
+                    return IconButton(
+                      onPressed: () {
+                        controller.toggleHadithBookmark(
+                          bookNumber: hadithController.bookNumber,
+                          collectionName: hadithController.collectionName,
+                          hadithNumber: index,
+                          noOfHadith: hadithController.totalNumberOfHadith,
+                          translation: true,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Bookmark saved for Hadith')),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.bookmark,
+                        color:
+                            isMarked ? Colors.red : AppColors().bookmarkColor,
+                      ),
                     );
                   },
-                  icon: Icon(Icons.bookmark, color: AppColors().bookmarkColor),
                 ),
               ),
               Text(
@@ -103,8 +116,6 @@ class HadithDetailScreen extends StatelessWidget {
                 textAlign: TextAlign.right,
               ),
               SizedBox(height: 10),
-              //      controller.surahTranslation.value
-              //         ?
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
@@ -123,6 +134,5 @@ class HadithDetailScreen extends StatelessWidget {
         ),
       ),
     );
-    //   });
   }
 }

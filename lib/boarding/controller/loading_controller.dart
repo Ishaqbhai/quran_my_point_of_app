@@ -4,19 +4,6 @@ import 'package:get/get.dart';
 class LoadingController extends GetxController {
   var isLoading = false.obs;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   // Ensuring loading state update happens after the first frame
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     showLoading();
-  //   });
-
-  //   // Simulate a delay, then hide loading
-  //   Future.delayed(const Duration(seconds: 3), () {
-  //     hideLoading();
-  //   });
-  // }
 
   void showLoading() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -25,7 +12,7 @@ class LoadingController extends GetxController {
   }
 
   void hideLoading() {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 1), () {
       isLoading.value = false;
     });
   }

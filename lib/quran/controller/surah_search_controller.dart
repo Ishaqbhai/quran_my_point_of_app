@@ -19,6 +19,8 @@ class SurahSearchController extends GetxController {
   RxInt j = 1.obs;
   final QuranController quranController = Get.put(QuranController());
   RxBool loading = false.obs;
+  RxBool isBookMark = false.obs;
+  RxInt bookmarkSurahNo = 0.obs;
 
   @override
   void onInit() {
@@ -82,8 +84,6 @@ class SurahSearchController extends GetxController {
                 query.toLowerCase(),
               ) || // Arabic name
               surah.nameEnglish.toLowerCase().contains(query.toLowerCase()),
-          //||
-          //  surah.meaning.toLowerCase().contains(query.toLowerCase()),
         ),
       );
     }
@@ -92,7 +92,7 @@ class SurahSearchController extends GetxController {
   void filterAyahs(String query) {
     searchAyahText.value = query;
     if (query.isEmpty) {
-      startIndex.value = 0;
+      startIndex.value = 1;
     } else {
       updateStartIndex(
         ayatCount: quranController.ayahCountSurah,
@@ -102,34 +102,16 @@ class SurahSearchController extends GetxController {
   }
 
   void filterAyahsJuz(String query) {
-    if (query.isEmpty) {
-      quranController.juzSurahAyahStartNo.value = 0;
+    if (query.isEmpty || query == "") {
+      quranController.juzSurahAyahStartNo.value = 1;
     } else {
       quranController.juzSurahAyahStartNo.value = int.parse(query);
-      // updateStartIndexJuz(ayahNumber: int.parse(query));
       j.value = 0;
     }
   }
 
-  void filterSurahJuz(String query) {
-    if (query.isEmpty) {
-      surahNumberJuz.value = 0;
-    } else {
-      surahNumberJuz.value = int.parse(query);
-    }
-  }
-
-  void updateStartIndexJuz({
-    //required int ayatCount,
-    //required int surahNumber,
-    //required bool bookMark,
-    int ayahNumber = 0,
-  }) {
-    //   int? ayahNo = bookMark ?
+  void updateStartIndexJuz({int ayahNumber = 0}) {
     int ayahNumber = int.tryParse(ayahJuzzController.text) ?? 0;
-    //if (ayahNo != null && ayahNo > 0 && ayahNo <= ayatCount) {
     satartingAyahNoJuz.value = ayahNumber - 1;
-    // surahNumberJuz.value = surahNumber; // Set ListView starting index
-    //  }
   }
 }

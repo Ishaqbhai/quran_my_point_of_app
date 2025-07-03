@@ -8,6 +8,7 @@ class QuranAudioController extends GetxController {
   var position = Duration.zero.obs;
   var duration = Duration.zero.obs;
   final QuranController quranController = Get.find();
+  RxInt currentIntex = 0.obs;
   String audioUrl =
       //"https://server8.mp3quran.net/afs/001005.mp3";
       //"https://server8.mp3quran.net/afs/001.mp3"; // Example Surah
@@ -15,6 +16,7 @@ class QuranAudioController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    //  Get.snackbar("Alert", "Please turn on your mobile data");
 
     player.onPositionChanged.listen((Duration pos) {
       position.value = pos;
@@ -35,6 +37,7 @@ class QuranAudioController extends GetxController {
     String url =
         "https://server8.mp3quran.net/afs/${surahNumber.toString().padLeft(3, '0')}.mp3";
     isPlaying.value = true;
+    
     await player.play(UrlSource(url));
   }
 
@@ -45,10 +48,25 @@ class QuranAudioController extends GetxController {
 
     for (int i = 0; i < surahNumberList.length; i++) {
       String surahNumber = surahNumberList[i].toString().padLeft(3, '0');
-      String url = "https://server8.mp3quran.net/afs/$surahNumber.mp3";
+      String url = "https://www.everyayah.com/data/afs/$surahNumber.mp3";
       await player.play(UrlSource(url)); // This plays one after another
       isPlaying.value = true;
     }
+  }
+
+  Future<void> playAudioByAyah({
+    required int ayahNo,
+    required int surahNo,
+  }) async {
+    final surah = surahNo.toString().padLeft(3, '0');
+    final ayah = ayahNo.toString().padLeft(3, '0');
+    String url =
+        "https://www.everyayah.com/data/Abdul_Basit_Murattal_64kbps/$surah$ayah.mp3";
+    await player.play(UrlSource(url)); // This plays one after another
+    isPlaying.value = true;
+    player.onPlayerComplete.listen((_) {
+      isPlaying.value = false;
+    });
   }
 
   Future<void> pauseAudio() async {

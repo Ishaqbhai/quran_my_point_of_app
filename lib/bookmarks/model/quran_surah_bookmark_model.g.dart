@@ -9,7 +9,7 @@ part of 'quran_surah_bookmark_model.dart';
 class QuranSurahBookmarkModelAdapter
     extends TypeAdapter<QuranSurahBookmarkModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 4;
 
   @override
   QuranSurahBookmarkModel read(BinaryReader reader) {
@@ -19,7 +19,7 @@ class QuranSurahBookmarkModelAdapter
     };
     return QuranSurahBookmarkModel(
       surahNumber: fields[0] as int,
-      ayahNumber: fields[1] as int,
+      ayahNumber: fields[1] as int?,
       translation: fields[2] as bool,
       surahName: fields[3] as String,
       pageNo: fields[4] as int?,

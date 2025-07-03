@@ -242,10 +242,14 @@ class QuranController extends GetxController {
   }
 
   getPageNoBySurah({required int surahNumber}) {
-    final surah = FlutterQuran().getSurah(surahNumber);
-    surahStartPageNo = surah.startPage;
-    surahEndPageNo = surah.endPage;
-    surahBookmarkPageNo = surahStartPageNo;
+    if (surahNumber < 1 || surahNumber > 114) {
+      throw Exception("Invalid Surah number: $surahNumber");
+    } else {
+      final surah = FlutterQuran().getSurah(surahNumber);
+      surahStartPageNo = surah.startPage;
+      surahEndPageNo = surah.endPage;
+      surahBookmarkPageNo = surahStartPageNo;
+    }
   }
 
   getSurahDetails({required int surahNo}) {
@@ -256,9 +260,18 @@ class QuranController extends GetxController {
     );
     surahVerseTranslation = List.generate(
       ayahCountSurah,
-      (i) => quran.getVerseTranslation(surahNo, i + 1),
+      (i) => getVerseTranslation(surahNo: surahNo, ayahNo: i + 1),
     );
     surahName = quran.getSurahName(surahNo);
+  }
+
+  getVerseTranslation({required int surahNo, required int ayahNo}) {
+    final versesList = Quran.getVerse(
+      surahNumber: surahNo,
+      verseNumber: ayahNo,
+      language: profileController.selectedLanguage.value,
+    );
+    return versesList.text;
   }
 
   // Returns a list of maps with Surah name and Ayah count within a specific Juz.
@@ -268,7 +281,6 @@ class QuranController extends GetxController {
   }) {
     List<Map<String, dynamic>> surahDetails = [];
     for (int surahNumber in surahNumbers) {
-      // String surahName = Quran.getSurahName(surahNumber);
       String surahNameEnglish = Quran.getSurahNameEnglish(surahNumber);
       int ayahCount = Quran.getTotalVersesOfSurahInJuz(
         surahNumber: surahNumber,

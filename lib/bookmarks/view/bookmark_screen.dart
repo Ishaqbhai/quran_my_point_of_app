@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quran_hadith_app/bookmarks/view/dua_bookmark.dart';
 import 'package:quran_hadith_app/bookmarks/view/hadith_bookmark.dart';
 import 'package:quran_hadith_app/bookmarks/view/quran_juz_bookmark.dart';
 import 'package:quran_hadith_app/bookmarks/view/quran_surah_bookmark.dart';
@@ -104,7 +105,9 @@ class BookmarksScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Get.to(DuaBookmark());
+                },
               ),
             ],
           ),

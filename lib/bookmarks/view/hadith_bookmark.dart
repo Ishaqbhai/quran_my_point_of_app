@@ -44,7 +44,7 @@ class HadithBookmark extends StatelessWidget {
                             ),
                             onTap: () async {
                               loadingController.showLoading();
-                              await Future.delayed(const Duration(seconds: 5));
+                              await Future.delayed(const Duration(seconds: 1));
                               // Navigate to the bookmarked Hadith
                               hadithController.fetchHadithBooks(
                                 collection: bookmark.collectionName,
@@ -57,6 +57,8 @@ class HadithBookmark extends StatelessWidget {
                                   bookmark.hadithaNo - 1;
                               loadingController.hideLoading();
                               Get.to(() => HadithDetailScreen());
+                              await Future.delayed(const Duration(seconds: 5));
+                              bookmarkController.removeHadithBookmark(bookmark);
                             },
                           );
                         },

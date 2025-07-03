@@ -10,7 +10,6 @@ ThemeData lightTheme = ThemeData(
     bodyLarge: GoogleFonts.poppins(fontSize: 18),
     bodyMedium: GoogleFonts.amiri(fontSize: 18), // Arabic font
   ),
-  //  textTheme: GoogleFonts.poppinsTextTheme(), // Apply Poppins font to the whole app
   // AppBar Theme
   appBarTheme: AppBarTheme(
     color: appColors.appBarColor, // AppBar background color
@@ -20,8 +19,9 @@ ThemeData lightTheme = ThemeData(
       fontSize: 20,
       fontWeight: FontWeight.bold,
     ),
-    iconTheme:
-        IconThemeData(color: appColors.appWhiteColor), // AppBar icon color
+    iconTheme: IconThemeData(
+      color: appColors.appWhiteColor,
+    ), // AppBar icon color
   ),
 
   // TextField Theme
@@ -34,19 +34,22 @@ ThemeData lightTheme = ThemeData(
       color: appColors.appWhiteColor, // Label color
     ),
     border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
+      borderRadius: BorderRadius.circular(15),
+      borderSide: BorderSide.none,
+    ),
     floatingLabelStyle: TextStyle(
-        backgroundColor: appColors.appWhiteColor,
-        color: appColors.backgroundColor,
-        fontWeight: FontWeight.bold,
-        fontSize: 20),
+      backgroundColor: appColors.appWhiteColor,
+      color: appColors.backgroundColor,
+      fontWeight: FontWeight.bold,
+      fontSize: 20,
+    ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide.none,
     ),
   ),
-  // floatingActionButtonTheme: FloatingActionButtonThemeData(
-  //   backgroundColor: appColors.appBarColor,
-  //   foregroundColor: appColors.appWhiteColor,
-  // )
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: appColors.appBarColor,
+    foregroundColor: appColors.appWhiteColor,
+  ),
 );

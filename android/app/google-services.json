@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "148866584693",
+    "project_id": "quran-hadith-app",
+    "storage_bucket": "quran-hadith-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148866584693:android:c643e58654b67a1072a83c",
+        "android_client_info": {
+          "package_name": "com.example.quran_hadith_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzb-YdCPUPWJJN7nUl3rDi0fv1PwCMx0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

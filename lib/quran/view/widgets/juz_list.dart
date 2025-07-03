@@ -24,10 +24,6 @@ class JuzList extends StatelessWidget {
             var juz = QuranController.juzData[index];
             int juzNumber = juz['juz'];
             List<int> surahNumbers = juz["surahs"];
-            // List<JuzSurahVerses> juzNumbers = Quran.getSurahVersesInJuzAsList(
-            //   juzNumber,
-            // );
-
             final surahDetails = quranController.getSurahDetailsInJuz(
               juzNumber: juzNumber,
               surahNumbers: surahNumbers,
@@ -80,14 +76,9 @@ class JuzList extends StatelessWidget {
 
                 onTap: () async {
                   loadingController.showLoading();
-                  // quranController.getAythJuzNoTranslation(surahNo: ,ayahCount: );
-                  // Navigate to Juz details page
-                  //    quranController.getAyathByPge();
-                  await Future.delayed(const Duration(seconds: 5));
-                  // quranController.getPageNoByjuz(
-                  //   juzNumber: juzNumber,
-                  //   surahNumber: surahNumbers[0],
-                  // );
+
+                  await Future.delayed(const Duration(seconds: 1));
+
                   await quranController.getNoOfVersesInJuz(
                     juzNumber: juzNumber,
                     surahNumber: surahNumbers[0],
@@ -96,7 +87,6 @@ class JuzList extends StatelessWidget {
                   searchController.j.value = 0;
                   loadingController.hideLoading();
                   Get.toNamed('/juz_screen', arguments: juzNumber);
-                  
                 },
               ),
             );

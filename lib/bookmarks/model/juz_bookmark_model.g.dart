@@ -17,18 +17,19 @@ class JuzBookmarkModelAdapter extends TypeAdapter<JuzBookmarkModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return JuzBookmarkModel(
-      pageNumber: fields[0] as int,
+      pageNumber: fields[0] as int?,
       juzNumber: fields[1] as int,
-      endAyahNumber: fields[2] as int,
+      endAyahNumber: fields[2] as int?,
       translation: fields[3] as bool,
       surahNumber: fields[4] as int,
+      surahStartAyahNumber: fields[5] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, JuzBookmarkModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.pageNumber)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class JuzBookmarkModelAdapter extends TypeAdapter<JuzBookmarkModel> {
       ..writeByte(3)
       ..write(obj.translation)
       ..writeByte(4)
-      ..write(obj.surahNumber);
+      ..write(obj.surahNumber)
+      ..writeByte(5)
+      ..write(obj.surahStartAyahNumber);
   }
 
   @override

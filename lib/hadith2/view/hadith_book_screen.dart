@@ -21,8 +21,8 @@ class HadithBookScreen extends StatelessWidget {
         title: Text(title),
         leading: IconButton(
           onPressed: () {
-            homeController.bottomNavIndex.value = 1;
-            Get.to(HomeScreen());
+            homeController.changeBottomNavIndex(index: 1);
+            Get.offAll(HomeScreen());
           },
           icon: Icon(Icons.arrow_back),
         ),
@@ -33,7 +33,10 @@ class HadithBookScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
+
                 child: TextField(
+                  controller: controller.searchHadithController,
+                  onChanged: (value) => controller.filterBooks(value),
                   decoration: InputDecoration(
                     hintText: 'Search',
                     prefixIcon: Icon(Icons.search),
@@ -99,8 +102,6 @@ class HadithBookScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-
-                            // subtitle: Text("Book Number: ${book.bookNumber}"),
                             subtitle: Align(
                               alignment: Alignment.bottomRight,
                               child: Text(
@@ -114,7 +115,6 @@ class HadithBookScreen extends StatelessWidget {
                             ),
 
                             onTap: () {
-                              // Navigate to book details
                               loadingController.showLoading();
                               controller.fetchHadithList(
                                 bookIndex: index + 1,

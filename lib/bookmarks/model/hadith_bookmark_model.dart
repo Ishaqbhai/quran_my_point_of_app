@@ -1,20 +1,4 @@
-// // ignore_for_file: public_member_api_docs, sort_constructors_first
-// class HadithBookmarkModel {
-//   int? id;
-//   String collectionName;
-//   int bookNo;
-//   int hadithaNo;
-//   int totalNoOfHadith;
-//   bool translation;
-//   HadithBookmarkModel({
-//     this.id,
-//     required this.collectionName,
-//     required this.bookNo,
-//     required this.hadithaNo,
-//     required this.totalNoOfHadith,
-//     required this.translation,
-//   });
-// }
+
 import 'package:hive/hive.dart';
 
 part 'hadith_bookmark_model.g.dart';

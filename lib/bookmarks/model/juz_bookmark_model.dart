@@ -1,18 +1,4 @@
-// // ignore_for_file: public_member_api_docs, sort_constructors_first
-// class JuzBookmarkModel {
-//   int? id;
-//   int pageNumber;
-//   int juzNumber;
-//   int endAyahNumber;
-//   bool translation;
-//   JuzBookmarkModel({
-//     this.id,
-//     required this.pageNumber,
-//     required this.juzNumber,
-//     required this.endAyahNumber,
-//     required this.translation,
-//   });
-// }
+
 import 'package:hive/hive.dart';
 
 part 'juz_bookmark_model.g.dart'; // This will be generated
@@ -34,15 +20,15 @@ class JuzBookmarkModel extends HiveObject {
   @HiveField(4)
   int surahNumber;
 
-   @HiveField(4)
+  @HiveField(5)
   int? surahStartAyahNumber;
 
   JuzBookmarkModel({
-     this.pageNumber,
+    this.pageNumber,
     required this.juzNumber,
-     this.endAyahNumber,
+    this.endAyahNumber,
     required this.translation,
     required this.surahNumber,
-     this.surahStartAyahNumber,
+    this.surahStartAyahNumber,
   });
 }
