@@ -21,7 +21,13 @@ class DuaDetails extends StatelessWidget {
         return duaController.duaList.isEmpty
             ? Text("Your dua list is empty.")
             : duaController.isLoading.value
-            ? CircularProgressIndicator()
+            ?  Center(
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
             : ListView.builder(
               itemCount: duaController.duaList.length,
               itemBuilder: (context, index) {

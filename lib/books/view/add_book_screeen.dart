@@ -44,6 +44,23 @@ class AddBookScreeen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 10),
+                    //......................................
+                    Text("Select Cover Image"),
+                    bookController.selectedImage != null
+                        ? Image.file(
+                          bookController.selectedImage!,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        )
+                        : SizedBox(),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        await bookController.selectImage();
+                      },
+                      icon: Icon(Icons.image),
+                      label: Text("Pick Cover Image"),
+                    ),
+                    SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

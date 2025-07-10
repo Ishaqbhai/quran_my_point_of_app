@@ -6,6 +6,7 @@ import 'package:quran_flutter/models/surah.dart';
 import 'package:quran_flutter/quran.dart';
 import 'package:quran_hadith_app/boarding/controller/loading_controller.dart';
 import 'package:quran_hadith_app/core/app_colors.dart';
+import 'package:quran_hadith_app/quran/controller/audio_controller.dart';
 import 'package:quran_hadith_app/quran/controller/quran_controller.dart';
 import 'package:quran_hadith_app/quran/controller/surah_search_controller.dart';
 
@@ -16,9 +17,11 @@ class SurahList extends StatelessWidget {
       Get.find<SurahSearchController>();
   final QuranController quranController = Get.find<QuranController>();
   final loadingController = Get.find<LoadingController>();
+  final QuranAudioController controller = Get.put(QuranAudioController());
 
   @override
   Widget build(BuildContext context) {
+    controller.stopAudio();
     return Stack(
       children: [
         Obx(() {

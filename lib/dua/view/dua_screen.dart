@@ -26,7 +26,13 @@ class DuaScreen extends StatelessWidget {
             return duaController.categoryList.isEmpty
                 ? Text("No dua categories found.")
                 : duaController.isLoading.value
-                ? CircularProgressIndicator()
+                ?  Center(
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
                 : ListView.builder(
                   itemCount: duaController.categoryList.length,
                   itemBuilder: (context, index) {
