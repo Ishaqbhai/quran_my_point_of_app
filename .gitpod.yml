@@ -1,8 +1,9 @@
-image: ghcr.io/gitpod-io/workspace-full:latest
+image: ubuntu:22.04
 
 tasks:
   - name: Setup Flutter
     init: |
+      apt update && apt install -y curl git unzip xz-utils zip libglu1-mesa
       git clone https://github.com/flutter/flutter.git -b stable
       export PATH="$PATH:/workspace/flutter/bin"
       flutter doctor
