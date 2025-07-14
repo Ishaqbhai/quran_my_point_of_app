@@ -1,10 +1,11 @@
-image: ubuntu:22.04
+image: mcr.microsoft.com/devcontainers/base:ubuntu
 
 tasks:
   - name: Setup Flutter
     init: |
-      apt update && apt install -y curl git unzip xz-utils zip libglu1-mesa
+      sudo apt update && sudo apt install -y curl git unzip xz-utils zip libglu1-mesa
       git clone https://github.com/flutter/flutter.git -b stable
+      echo 'export PATH="$PATH:/workspace/flutter/bin"' >> ~/.bashrc
       export PATH="$PATH:/workspace/flutter/bin"
       flutter doctor
     command: |
