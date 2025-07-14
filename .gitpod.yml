@@ -1,0 +1,16 @@
+image: ghcr.io/gitpod-io/workspace-full:latest
+
+tasks:
+  - name: Setup Flutter
+    init: |
+      git clone https://github.com/flutter/flutter.git -b stable
+      export PATH="$PATH:/workspace/flutter/bin"
+      flutter doctor
+    command: |
+      export PATH="$PATH:/workspace/flutter/bin"
+      flutter pub get
+      flutter run -d chrome
+
+ports:
+  - port: 5000
+    onOpen: open-preview
